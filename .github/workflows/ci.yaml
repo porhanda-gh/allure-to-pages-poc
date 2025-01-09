@@ -18,19 +18,28 @@ jobs:
         uses: actions/checkout@v3
 
       # Setup Node.js
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
+      #- name: Setup Node.js
+      #  uses: actions/setup-node@v3
+      #  with:
+      #    node-version: '16'
 
       # Install dependencies
-      - name: Install Dependencies
-        run: npm install
+      #- name: Install Dependencies
+      #  run: npm install
 
       # Run tests and generate Allure results
-      - name: Run Tests
-        run: npm test
+      #- name: Run Tests
+      #  run: npm test
 
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: zulu
+          java-version: 17
+
+      - name: Run tests
+        run: ./gradlew clean test
+        
       - name: Load test report history
         uses: actions/checkout@v3
         if: always()
