@@ -49,42 +49,42 @@ jobs:
             echo "::warning title=Invalid file permissions automatically fixed::$line"
           done
 
-      - name: Publish test report
-        uses: peaceiris/actions-gh-pages@v3
-        if: always()
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh_pages-${{ github.run_number }}
-          publish_dir: allure-history
+      #- name: Publish test report
+        #uses: peaceiris/actions-gh-pages@v3
+        #if: always()
+        #with:
+        #  github_token: ${{ secrets.GITHUB_TOKEN }}
+        #  publish_branch: gh_pages-${{ github.run_number }}
+        #  publish_dir: allure-history
 
-      - name: Publish test report
-        uses: peaceiris/actions-gh-pages@v3
-        if: always()
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages-${{ github.run_number }}
-          publish_dir: allure-history
+      #- name: Publish test report
+        #uses: peaceiris/actions-gh-pages@v3
+        #if: always()
+        #with:
+        #  github_token: ${{ secrets.GITHUB_TOKEN }}
+        #  publish_branch: gh-pages-${{ github.run_number }}
+        #  publish_dir: allure-history
           
-      #- name: uplad allure report to artifactory
-      #  id: deployment
-      #  uses: actions/upload-pages-artifact@v3
-      #  with:
-      #    path: allure-report/
-      #    name: allure-report-${{github.run_number}}
+      - name: uplad allure report to artifactory
+        id: deployment
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: allure-report/
+          name: allure-report-${{github.run_number}}
       
    # Deployment job  
-  # deploy:
-    # environment:
-     #  name: upload-to-pages
-     #  url: ${{ steps.deployment.outputs.page_url }}allure-report-${{github.run_number}}
-    # runs-on: ubuntu-latest
-    # permissions:
-    #   id-token: write
-    #   pages: write
-    # needs: test-and-report
-    # steps:
-    #   - name: Deploy to GitHub Pages
-    #     id: deployment
-    #     uses: actions/deploy-pages@v4
-    #     with:
-    #       artifact_name: allure-report-${{github.run_number}}
+  deploy:
+     environment:
+       name: upload-to-pages
+       url: ${{ steps.deployment.outputs.page_url }}allure-report-${{github.run_number}}
+     runs-on: ubuntu-latest
+     permissions:
+       id-token: write
+       pages: write
+     needs: test-and-report
+     steps:
+       - name: Deploy to GitHub Pages
+         id: deployment
+         uses: actions/deploy-pages@v4
+         with:
+           artifact_name: allure-report-${{github.run_number}}
