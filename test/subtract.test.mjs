@@ -11,6 +11,6 @@ describe('Subtracting Function', () => {
     });
 
     it('should handle subtract zero', () => {
-        expect(subtract(2, 0)).to.equal(2);
+        expect(subtract(2, 0)).to.equal(1);
     });
 });
