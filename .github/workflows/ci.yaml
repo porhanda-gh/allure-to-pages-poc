@@ -54,7 +54,7 @@ jobs:
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh_pages
+          publish_branch: gh_pages-${{ github.run_number }}
           publish_dir: allure-history
 
       - name: Publish test report
@@ -62,7 +62,7 @@ jobs:
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
+          publish_branch: gh-pages-${{ github.run_number }}
           publish_dir: allure-history
           
       #- name: uplad allure report to artifactory
