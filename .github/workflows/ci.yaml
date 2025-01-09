@@ -43,11 +43,12 @@ jobs:
       - name: list all files in the directory
         shell: bash
         run: ls -R
-      - name: Fix permissions
-        run: |
-          chmod -c -R +rX "_site/" | while read line; do
-            echo "::warning title=Invalid file permissions automatically fixed::$line"
-          done
+      
+      #- name: Fix permissions
+      #  run: |
+      #    chmod -c -R +rX "_site/" | while read line; do
+      #      echo "::warning title=Invalid file permissions automatically fixed::$line"
+      #    done
 
       - name: Publish test report
         uses: peaceiris/actions-gh-pages@v3
