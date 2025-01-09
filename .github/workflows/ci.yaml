@@ -38,16 +38,17 @@ jobs:
         with:
           allure_history: allure-history
           allure_results: allure-results
-          gh_pages: allure-report/allure-report-${{ github.run_number }}
+          gh_pages: gh-pages  #allure-report/allure-report-${{ github.run_number }}
           
       - name: list all files in the directory
         shell: bash
         run: ls -R
-      - name: Fix permissions
-        run: |
-          chmod -c -R +rX "_site/" | while read line; do
-            echo "::warning title=Invalid file permissions automatically fixed::$line"
-          done
+      
+      #- name: Fix permissions
+      #  run: |
+      #    chmod -c -R +rX "_site/" | while read line; do
+      #      echo "::warning title=Invalid file permissions automatically fixed::$line"
+      #    done
 
       #- name: Publish test report
         #uses: peaceiris/actions-gh-pages@v3
@@ -56,16 +57,8 @@ jobs:
         #  github_token: ${{ secrets.GITHUB_TOKEN }}
         #  publish_branch: gh_pages-${{ github.run_number }}
         #  publish_dir: allure-history
-
-      #- name: Publish test report
-        #uses: peaceiris/actions-gh-pages@v3
-        #if: always()
-        #with:
-        #  github_token: ${{ secrets.GITHUB_TOKEN }}
-        #  publish_branch: gh-pages-${{ github.run_number }}
-        #  publish_dir: allure-history
           
-      - name: uplad allure report to artifactory
+      - name: upload allure report to artifactory
         id: deployment
         uses: actions/upload-pages-artifact@v3
         with:
