@@ -38,7 +38,8 @@ jobs:
         with:
           allure_history: allure-history
           allure_results: allure-results
-          allure_report: allure-report/allure-report-${{ github.run_number }}
+          gh_pages: allure-report/allure-report-${{ github.run_number }}
+          
       - name: list all files in the directory
         shell: bash
         run: ls -R
@@ -53,7 +54,7 @@ jobs:
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: allure-report/
+          publish_branch: gh_pages
           publish_dir: allure-history
           
       #- name: uplad allure report to artifactory
