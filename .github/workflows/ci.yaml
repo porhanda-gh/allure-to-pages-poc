@@ -22,16 +22,21 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-
-      # Install dependencies
+      
       - name: Install Dependencies
         run: npm install
-
-      # Run tests and generate Allure results
+        
       - name: Run Tests
         run: npm test
 
-      # Generate Allure Report
+      - name: Load test report history
+        uses: actions/checkout@v3
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: allure-history
+          
       - name: Build test report
         uses: simple-elf/allure-report-action@v1.7
         if: always()
@@ -43,48 +48,17 @@ jobs:
       - name: list all files in the directory
         shell: bash
         run: ls -R
+        
       - name: Fix permissions
         run: |
           chmod -c -R +rX "_site/" | while read line; do
             echo "::warning title=Invalid file permissions automatically fixed::$line"
           done
 
-      #- name: Publish test report
-        #uses: peaceiris/actions-gh-pages@v3
-        #if: always()
-        #with:
-        #  github_token: ${{ secrets.GITHUB_TOKEN }}
-        #  publish_branch: gh_pages-${{ github.run_number }}
-        #  publish_dir: allure-history
-
-      #- name: Publish test report
-        #uses: peaceiris/actions-gh-pages@v3
-        #if: always()
-        #with:
-        #  github_token: ${{ secrets.GITHUB_TOKEN }}
-        #  publish_branch: gh-pages-${{ github.run_number }}
-        #  publish_dir: allure-history
-          
-      - name: uplad allure report to artifactory
-        id: deployment
-        uses: actions/upload-pages-artifact@v3
+      - name: Publish test report
+        uses: peaceiris/actions-gh-pages@v3
+        if: always()
         with:
-          path: allure-report/
-          name: allure-report-${{github.run_number}}
-      
-   # Deployment job  
-  deploy:
-     environment:
-       name: upload-to-pages
-       url: ${{ steps.deployment.outputs.page_url }}allure-report-${{github.run_number}}
-     runs-on: ubuntu-latest
-     permissions:
-       id-token: write
-       pages: write
-     needs: test-and-report
-     steps:
-       - name: Deploy to GitHub Pages
-         id: deployment
-         uses: actions/deploy-pages@v4
-         with:
-           artifact_name: allure-report-${{github.run_number}}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh_pages
+          publish_dir: allure-history
