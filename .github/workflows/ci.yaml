@@ -35,7 +35,7 @@ jobs:
         continue-on-error: true
         with:
           ref: gh-pages
-          path: gh-pages
+          path: allure-history
           
       - name: Build test report
         uses: simple-elf/allure-report-action@v1.7
@@ -43,7 +43,7 @@ jobs:
         with:
           allure_history: allure-history
           allure_results: allure-results
-          gh_pages: gh-pages  #allure-report/allure-report-${{ github.run_number }}
+          gh_pages: allure-report/allure-report-${{ github.run_number }}
           
       - name: list all files in the directory
         shell: bash
