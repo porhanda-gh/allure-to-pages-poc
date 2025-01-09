@@ -1,17 +1,12 @@
 name: Build, Test, and Deploy Allure Report
+
 permissions:
   id-token: write
   repository-projects: write
   contents: write
 
-  
 on:
-  pull_request:
-    branches:
-      - main
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   test-and-report:
@@ -52,12 +47,22 @@ jobs:
           chmod -c -R +rX "_site/" | while read line; do
             echo "::warning title=Invalid file permissions automatically fixed::$line"
           done
-      - name: uplad allure report to artifactory
-        id: deployment
-        uses: actions/upload-pages-artifact@v3
+
+      - name: Publish test report
+        uses: peaceiris/actions-gh-pages@v3
+        if: always()
         with:
-          path: allure-report/
-          name: allure-report-${{github.run_number}}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: allure-report/
+          publish_dir: allure-history
+          
+      #- name: uplad allure report to artifactory
+      #  id: deployment
+      #  uses: actions/upload-pages-artifact@v3
+      #  with:
+      #    path: allure-report/
+      #    name: allure-report-${{github.run_number}}
+      
    # Deployment job  
   deploy:
     environment:
